@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Skateboarders4NACharacter.generated.h"
 
 class USpringArmComponent;
@@ -44,6 +45,9 @@ class ASkateboarders4NACharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SprintAction;
+
 public:
 	ASkateboarders4NACharacter();
 	
@@ -64,10 +68,27 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	virtual void Tick(float DeltaTime) override;
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	// ON/OFF sprint
+	void StartSprinting();
+	void StopSprinting();
+
+	// Initial speed
+	float InitialWalkSpeed;
+
+	// Speeds
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	//	float WalkSpeed = 300.0f;  // Normal Speed
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+		float SprintMultiplier = 1.5f; // Sprint speed multiplyer
+
 };
 

@@ -52,13 +52,33 @@ ASkateboarders4NACharacter::ASkateboarders4NACharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	// Set player initial speed
+	InitialWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
 
 void ASkateboarders4NACharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	// Cache initial character speed
+	InitialWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+
 }
+
+void ASkateboarders4NACharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, FString::Printf(TEXT("Max Walk Speed: %f"), GetCharacterMovement()->MaxWalkSpeed));
+	}
+
+
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input
@@ -86,11 +106,16 @@ void ASkateboarders4NACharacter::SetupPlayerInputComponent(UInputComponent* Play
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASkateboarders4NACharacter::Look);
+
+		// Link functions by pressing and releasing the Shift key
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ASkateboarders4NACharacter::StartSprinting);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ASkateboarders4NACharacter::StopSprinting);
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+
 }
 
 void ASkateboarders4NACharacter::Move(const FInputActionValue& Value)
@@ -128,3 +153,23 @@ void ASkateboarders4NACharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+
+void ASkateboarders4NACharacter::StartSprinting()
+{
+	GetCharacterMovement()->MaxWalkSpeed = InitialWalkSpeed * SprintMultiplier;
+}
+
+void ASkateboarders4NACharacter::StopSprinting()
+{
+	GetCharacterMovement()->MaxWalkSpeed = InitialWalkSpeed;
+}
+
+//void ASkateboarders4NACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+//{
+//	Super::SetupPlayerInputComponent(PlayerInputComponent);
+//
+//	// Link functions by pressing and releasing the Shift key
+//	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ASkateboarders4NACharacter::StartSprinting);
+//	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ASkateboarders4NACharacter::StopSprinting);
+//}
+
