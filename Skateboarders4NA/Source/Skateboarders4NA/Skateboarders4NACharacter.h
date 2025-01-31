@@ -45,37 +45,25 @@ class ASkateboarders4NACharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	// Sprint Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* SprintAction;
+
+	// Brake Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		UInputAction* BrakeAction;
 
 public:
 	ASkateboarders4NACharacter();
 	
-
-protected:
-
-	/** Called for movement input */
-	void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
-	void Look(const FInputActionValue& Value);
-			
-
-protected:
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
-	// To add mapping context
-	virtual void BeginPlay();
-
-	virtual void Tick(float DeltaTime) override;
-
-public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+
+	///// Inputs /////
+	
 	// ON/OFF sprint
 	void StartSprinting();
 	void StopSprinting();
@@ -83,12 +71,38 @@ public:
 	// Initial speed
 	float InitialWalkSpeed;
 
-	// Speeds
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-	//	float WalkSpeed = 300.0f;  // Normal Speed
-
+	// Sprint Speed
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-		float SprintMultiplier = 1.5f; // Sprint speed multiplyer
+	float SprintMultiplier = 1.5f; // Sprint speed multiplyer
+
+
+protected:
+
+	// To add mapping context
+	virtual void BeginPlay();
+
+	// To print information
+	virtual void Tick(float DeltaTime) override;
+
+
+	///// Inputs /////
+	
+	/** Called for movement input */
+	void Move(const FInputActionValue& Value);
+
+	/** Called for looking input */
+	void Look(const FInputActionValue& Value);
+			
+	// APawn interface
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+		
+	// Brake Speed
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float CrouchSpeed = 100.0f;
+
+	// ON/OFF Brake
+	void StartCrouching();
+	void StopCrouching();
 
 };
 

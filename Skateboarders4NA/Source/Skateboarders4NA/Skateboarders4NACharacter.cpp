@@ -107,9 +107,14 @@ void ASkateboarders4NACharacter::SetupPlayerInputComponent(UInputComponent* Play
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASkateboarders4NACharacter::Look);
 
-		// Link functions by pressing and releasing the Shift key
+		// Sprinting
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ASkateboarders4NACharacter::StartSprinting);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ASkateboarders4NACharacter::StopSprinting);
+
+		// Braking
+		EnhancedInputComponent->BindAction(BrakeAction, ETriggerEvent::Started, this, &ASkateboarders4NACharacter::StartCrouching);
+		EnhancedInputComponent->BindAction(BrakeAction, ETriggerEvent::Completed, this, &ASkateboarders4NACharacter::StopCrouching);
+
 	}
 	else
 	{
@@ -154,6 +159,9 @@ void ASkateboarders4NACharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+
+// Sprint Functions
+
 void ASkateboarders4NACharacter::StartSprinting()
 {
 	GetCharacterMovement()->MaxWalkSpeed = InitialWalkSpeed * SprintMultiplier;
@@ -164,12 +172,16 @@ void ASkateboarders4NACharacter::StopSprinting()
 	GetCharacterMovement()->MaxWalkSpeed = InitialWalkSpeed;
 }
 
-//void ASkateboarders4NACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-//{
-//	Super::SetupPlayerInputComponent(PlayerInputComponent);
-//
-//	// Link functions by pressing and releasing the Shift key
-//	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ASkateboarders4NACharacter::StartSprinting);
-//	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ASkateboarders4NACharacter::StopSprinting);
-//}
+
+// Brake Functions
+
+void ASkateboarders4NACharacter::StartCrouching()
+{
+	GetCharacterMovement()->MaxWalkSpeed = CrouchSpeed;
+}
+
+void ASkateboarders4NACharacter::StopCrouching()
+{
+	GetCharacterMovement()->MaxWalkSpeed = InitialWalkSpeed;
+}
 
