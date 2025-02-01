@@ -51,29 +51,42 @@ class ASkateboarders4NACharacter : public ACharacter
 
 	// Brake Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		UInputAction* BrakeAction;
+	UInputAction* BrakeAction;
 
 public:
+	
 	ASkateboarders4NACharacter();
 	
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 
 	///// Inputs /////
 	
-	// ON/OFF sprint
-	void StartSprinting();
-	void StopSprinting();
-
 	// Initial speed
 	float InitialWalkSpeed;
+
 
 	// Sprint Speed
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float SprintMultiplier = 1.5f; // Sprint speed multiplyer
+
+	// ON/OFF sprint
+	void StartSprinting();
+	void StopSprinting();
+	
+
+	// Brake Speed
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float CrouchSpeed = 100.0f;
+
+	// ON/OFF Brake
+	void StartCrouching();
+	void StopCrouching();
+
 
 
 protected:
@@ -95,14 +108,6 @@ protected:
 			
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-		
-	// Brake Speed
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-	float CrouchSpeed = 100.0f;
-
-	// ON/OFF Brake
-	void StartCrouching();
-	void StopCrouching();
 
 };
 

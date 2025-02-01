@@ -25,21 +25,20 @@ APointCollector::APointCollector()
 
 
 }
-    // Initialize overlap bool
-    bool bHasOverlapped = false;
+    
+// Initialize overlap bool
+bool bHasOverlapped = false;
 
 // Called when the game starts or when spawned
 void APointCollector::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void APointCollector::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 
@@ -62,7 +61,7 @@ void APointCollector::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor
                 GM->AddScore(PointsToAdd);
                 bHasOverlapped = true;
 
-                // Desabilitar a colisão até o personagem sair
+                // Disable collision until the character get out
                 CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
             }
         }
@@ -72,34 +71,20 @@ void APointCollector::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor
 void APointCollector::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-
-    UE_LOG(LogTemp, Warning, TEXT("GGGGGGGGGGGGGGGG"));
+    // Debug print
+    //UE_LOG(LogTemp, Warning, TEXT("Start End Overlap"));
 
     if (OtherActor && OtherActor != this)
     {
-        UE_LOG(LogTemp, Warning, TEXT("DDDDDDDDDDDDDDDDD"));
+        // Debug print
+        //UE_LOG(LogTemp, Warning, TEXT("AAAAAAAAAAAA"));
 
         ACharacter* PlayerCharacter = Cast<ACharacter>(OtherActor);
         if (PlayerCharacter)
-        {
-            
-            // Reabilitar a colisão quando o personagem sair
+        {  
+            // Re-enable collision when character get out
             GetWorld()->GetTimerManager().SetTimer(TimerHandle_ReenableCollision, this, &APointCollector::ReenableCollision, 0.5f, false);
-
-            //CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-
-            //// Debug print: check if collision was re-enabled
-            //if (CollisionBox->IsCollisionEnabled())
-            //{
-            //    UE_LOG(LogTemp, Warning, TEXT("Colisão reabilitada com sucesso."));
-            //}
-            //else
-            //{
-            //    UE_LOG(LogTemp, Warning, TEXT("Falha ao reabilitar a colisão."));
-            //}
-
         }
-
     }
 }
 

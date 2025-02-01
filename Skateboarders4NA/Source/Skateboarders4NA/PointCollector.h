@@ -16,6 +16,10 @@ public:
 	// Sets default values for this actor's properties
 	APointCollector();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,6 +33,10 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Points")
         int32 PointsToAdd = 1;
 
+    // Timer to reenable collision
+    FTimerHandle TimerHandle_ReenableCollision;
+    void ReenableCollision();
+
     // Begin overlap
     UFUNCTION()
         void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -39,14 +47,4 @@ protected:
     UFUNCTION()
         void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
             UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-private:
-    FTimerHandle TimerHandle_ReenableCollision;
-
-    void ReenableCollision();
-
 };

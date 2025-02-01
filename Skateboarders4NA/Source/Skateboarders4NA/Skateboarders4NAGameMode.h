@@ -42,8 +42,6 @@ protected:
 
     // Update widget text
     void UpdateScoreWidget();
-    
-
 };
 
 
