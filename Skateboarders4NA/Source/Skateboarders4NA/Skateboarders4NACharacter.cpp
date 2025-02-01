@@ -71,10 +71,10 @@ void ASkateboarders4NACharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, FString::Printf(TEXT("Max Walk Speed: %f"), GetCharacterMovement()->MaxWalkSpeed));
-	}
+	//if (GEngine)
+	//{
+	//	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, FString::Printf(TEXT("Max Walk Speed: %f"), GetCharacterMovement()->MaxWalkSpeed));
+	//}
 
 
 }
